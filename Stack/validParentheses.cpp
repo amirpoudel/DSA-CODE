@@ -65,7 +65,7 @@ bool matchBracket(char bracket1 , char bracket2){
 bool validParentheses(string input,int size){
     Stack stack(size);
 
-    for(int i=0;i<size;i++){
+   for(int i=0;i<size;i++){
         char bracket = input[i];
         if(bracket=='[' or bracket=='{' or bracket=='('){
             stack.push(bracket);
