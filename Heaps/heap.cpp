@@ -70,6 +70,10 @@ public:
 
 
 
+
+
+
+
     void print(){
         for(int i=1;i<=size;i++){
             cout<<arr[i]<<" ";
@@ -79,6 +83,42 @@ public:
 
 
 };
+
+
+
+
+
+void heapify(int arr[],int size,int i){
+    int largest = i;
+    int left = 2*i;
+    int right = 2*i+1;
+
+    if(left<=size and arr[left]>arr[largest]){
+        largest = left;
+    }
+    if(right <=size and arr[right]>arr[largest]){
+        largest = right;
+    }
+
+    if(largest!=i){
+        swap(arr[largest],arr[i]);
+        heapify(arr,size,largest);
+    }
+
+}
+
+void heapSort(int arr[],int size){
+
+    while(size>0){
+        swap(arr[size],arr[1]);
+        size--;
+        heapify(arr,size,1);
+
+
+    }
+
+}
+
 
 
 int main(){
@@ -94,6 +134,19 @@ int main(){
     h.deleteFromHeap();
     cout<<endl;
     h.print();
+
+
+    int arr[6]= {-1,54,53,55,52,50};
+   for(int i=5/2;i>0;i--){
+       heapify(arr,5,i);
+   }
+    heapSort(arr,5);
+    cout<<"Printing the array now"<<endl;
+
+    for(int i=1;i<=5;i++){
+        cout<<arr[i]<<" ";
+    }
+
 
 
     return 0;
