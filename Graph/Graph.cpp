@@ -405,3 +405,250 @@ int main(){
 //
 //
 //}
+//-------------------------------------Cycle Detection in Directed Graph Using DFS----------------------------
+//#include<unordered_map>
+//#include<list>
+//
+//bool dfsDetect(unordered_map<int,list<int>>&adjList, unordered_map<int,bool>&visited, unordered_map<int,bool>&dfsVisited,int node){
+//
+//    visited[node]=true;
+//    dfsVisited[node]=true;
+//
+//    for(auto i:adjList[node]){
+//        if(!visited[i]){
+//            int cycleDetect = dfsDetect(adjList,visited,dfsVisited,i);
+//            if(cycleDetect){
+//                return true;
+//            }
+//        }else if(dfsVisited[i]){
+//            return true;
+//        }
+//    }
+//    dfsVisited[node]=false;
+//    return false;
+//
+//
+//}
+//
+//int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+//    // Write your code here.
+//    //creating adjList;
+//    unordered_map<int,list<int>>adjList;
+//    for(int i=0;i<edges.size();i++){
+//
+//        adjList[edges[i].first].push_back(edges[i].second);
+//
+//    }
+//
+//    //visited and dfs visited;
+//    unordered_map<int,bool> visited;
+//    unordered_map<int,bool>dfsVisited;
+//
+//    for(int i=1;i<=n;i++){
+//        if(!visited[i]){
+//            bool cycle = dfsDetect(adjList,visited,dfsVisited,i);
+//            if(cycle){
+//                return 1;
+//            }
+//        }
+//    }
+//
+//    return 0;
+//}
+
+// detect cycle in direct graph using kahn's algo
+#include<bits/stdc++.h>
+
+int detectCycleInDirectedGraph(int n, vector < pair < int, int >> & edges) {
+    // Write your code here.
+    //creating adjList;
+    unordered_map<int,list<int>>adjList;
+    for(int i=0;i<edges.size();i++){
+        int a = edges[i].first-1;//creating zero based indexing
+        int b = edges[i].second-1;
+
+        adjList[a].push_back(b);
+    }
+
+    //calculating indegree
+    vector<int>indegree(n,0);
+    for(int i=0;i<n;i++){
+        for(auto k:adjList[i]){
+            indegree[k]++;
+        }
+    }
+
+    //all zero indegree push to queue
+    queue<int>q;
+    for(int i=0;i<n;i++){
+        if(indegree[i]==0){
+            q.push(i);
+        }
+    }
+    //doing bfs things
+    int count = 0; //maintain count variable for track total number of sorting
+    while(!q.empty()){
+        int front = q.front();
+        q.pop();
+        count++;
+        //removing indegree of adjListl;
+        for(auto i:adjList[front]){
+            indegree[i]--;
+            //if indegree is zero then push to queue;
+            if(indegree[i]==0){
+                q.push(i);
+            }
+        }
+
+    }
+
+    if(count==n){
+        return 0;//valid topological sort i.e no cycle present;
+    }
+    return 1;//invalid topological sort i.e cycle present;
+
+
+}
+
+
+//------------------------------------Shortest path using BFS-----------------------------------------------
+//vector<int> shortestPath( vector<pair<int,int>> edges , int n , int m, int s , int t){
+//
+//    // Write your code here
+//
+//    //creating adjList;
+//    unordered_map<int,list<int>>adjList;
+//    for(int i=0;i<edges.size();i++){
+//        int a = edges[i].first;
+//        int b = edges[i].second;
+//
+//        adjList[a].push_back(b);
+//        adjList[b].push_back(a);
+//    }
+//
+//    //visited
+//    unordered_map<int,bool>visited;
+//    //parent;
+//    unordered_map<int,int> parent;
+//
+//    //doing bfs stuff to find parent;
+//
+//
+//
+//
+//    queue<int>q;
+//    q.push(s);
+//    parent[s]=-1;
+//    visited[s]=true;
+//    while(!q.empty()){
+//
+//        int front = q.front();
+//        q.pop();
+//
+//        for(auto i:adjList[front]){
+//            if(!visited[i]){
+//
+//                parent[i]=front;
+//                visited[i]=true;
+//                q.push(i);
+//            }
+//        }
+//
+//    }
+//
+//
+//    int source = s;
+//    int destination  = t;
+//    vector<int> path;
+//    path.push_back(t);
+//    while(destination!=source){
+//
+//        destination = parent[destination];
+//        path.push_back(destination);
+//    }
+//
+//    reverse(path.begin(),path.end());
+//    return path;
+//
+//
+//}
+
+
+
+////testing code get path using bfs
+
+#include <bits/stdc++.h>
+
+void getPathUsingBfs(unordered_map<int,list<int>>&adjList,unordered_map<int,bool>&visited,unordered_map<int,int>&parent,int node){
+    queue<int>q;
+    q.push(node);
+    parent[node]=-1;
+    visited[node]=true;
+
+    while(!q.empty()){
+        int front = q.front();
+        q.pop();
+
+        for(auto i:adjList[front]){
+            if(!visited[i]){
+                q.push(i);
+                visited[i];
+                parent[i]=front;
+            }
+        }
+    }
+}
+
+vector<int> getPath(int V, int E, vector<int> a, vector<int> b, int v1, int v2) {
+    //    Write your code here
+
+    //creating adjList;
+    unordered_map<int,list<int>>adjList;
+
+    for(int i=0;i<E;i++){
+        int u = a[i];
+        int v = b[i];
+
+        adjList[u].push_back(v);
+        adjList[v].push_back(u);
+
+    }
+
+    //visited map
+    unordered_map<int,bool>visited;
+
+    //parent map
+    unordered_map<int,int>parent;
+    //storing path in vector
+    vector<int>path;
+
+
+    for(int i=0;i<V;i++){
+        if(!visited[i]){
+            getPathUsingBfs()
+        }
+    }
+
+    int starting = v1;
+    int ending = v2;
+
+    path.push_back(v2);
+
+    while(ending!=starting){
+
+        ending = parent[ending]{
+            path.push_back(ending);
+        }
+    }
+
+    vector<int> empty;
+    if(path.end()!=v1){
+        return empty;
+    }
+
+    return path;
+
+
+
+
+}

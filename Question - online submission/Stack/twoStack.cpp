@@ -68,3 +68,72 @@ public:
 
     }
 };
+
+//Second Try COde Work Perfect - code studio
+
+#include <bits/stdc++.h>
+class TwoStack {
+
+
+
+public:
+    int *arr;
+    int size1;
+    int size2;
+    int size;
+    // Initialize TwoStack.
+    TwoStack(int s) {
+        // Write your code here.
+        arr = new int[s];
+        size1=-1;
+        size2=s;
+        size = s;
+    }
+
+    // Push in stack 1.
+    void push1(int num) {
+        // Write your code here.
+        if(size1<size2-1){
+            size1++;
+            arr[size1]=num;
+
+        }
+
+    }
+
+    // Push in stack 2.
+    void push2(int num) {
+        // Write your code here.
+        if(size1<size2-1){
+            size2--;
+            arr[size2]=num;
+
+        }
+    }
+
+    // Pop from stack 1 and return popped element.
+    int pop1() {
+        // Write your code here.
+        if(size1>=0){
+            int top = arr[size1];
+            size1--;
+            return top;
+        }else{
+            return -1;
+        }
+    }
+
+    // Pop from stack 2 and return popped element.
+    int pop2() {
+        // Write your code here.
+        if(size2<=size-1){
+            int top = arr[size2];
+
+            size2++;
+            return top;
+        }else{
+            return -1;
+        }
+    }
+};
+
